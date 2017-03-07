@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<connectionStrings>
+    <add connectionString="server=65.255.36.8;uid=vdsql;pwd=$@#UGda&#38;VDFom;database=SiteDB;Persist Security Info = false" name="SiteDB"/>
+    <add connectionString="" name=""/>
+</connectionStrings>
