@@ -25,47 +25,240 @@ using ImageProcessor.Imaging.Formats;
 using ImageProcessor;
 using System.Threading;
 using System.Text.RegularExpressions;
+using iTextSharp.text;
+using System.Collections;
+using System.Net.Http;
 
 namespace Test
 {
     public enum DBName { SiteDB }
     public class Program
     {
+
         static void Main(string[] args)
         {
+            #region 经典递归
+            //经典递归
+            //var recursive_list = new List<int>();
+            //for (int i = 1; i < 30; i++)
+            //{
+            //    recursive_list.Add(GetRecursive(i));
+            //}
+            #endregion
 
-            var userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
-            //"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1";
-            Regex regex = new Regex("Android|iPhone|iPod|mobile|ucweb|Windows Phone|SymbianOS", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            if (regex.IsMatch(userAgent))
-            {
-                Console.WriteLine("/");
-            }
-            else
-            {
-                Console.WriteLine("http:/www.auto.life/");
-            }
+            #region 快速排序 递归
+            //var func = new Func<IList<int>, IList<int>>((arr) =>
+            //{
+            //    return arr;
+            //});
+            ////快速排序 递归
+            //var list = new List<int> { 5, 9, 7, 3, 99, 11, 4, 58, 24, 88, 42 };
+            //var t = QuickSort(list);
+            //Console.WriteLine(string.Join(",", t.ToArray()));
+            #endregion
 
-            var outPath = @"E:\images-test\1\1.jpg";
-            Size size = new Size(640, 0);
-            ISupportedImageFormat format = new JpegFormat { Quality = 85 };
-            ImageProcessor.Imaging.ResizeLayer resize = new ImageProcessor.Imaging.ResizeLayer(size, ImageProcessor.Imaging.ResizeMode.Max);
+            #region skip/take 分页排序
+            /*
+             * skip take 获取数据
+             * skip 跳过n条之后数据
+             * take 获取当前连续n条数据
+             */
+            //var list = new List<int>();
+            //for (int i = 0; i < 30; i++)
+            //{
+            //    list.Add(i + 1);
+            //}
+            //Console.WriteLine(string.Join(",", list.Take(10).ToArray()));
+            //Console.WriteLine(string.Join(",", list.Skip(10).Take(10).ToArray()));
+            //Console.WriteLine(string.Join(",", list.Skip(20).Take(10).ToArray()));
+            //Console.WriteLine(string.Join(",", list.Skip(20).Take(10).OrderBy(x=>x).ToArray()));
+            //Console.WriteLine(string.Join(",", list.Skip(20).Take(10).OrderByDescending(x => x).ToArray()));
+            #endregion
 
-            var fileName = @"E:\images-test\57906074N8c9c510f.jpg";
-            Console.WriteLine(fileName);
-            using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
-                {
-                    imageFactory.Load(fs)
-                    .Resize(resize)
-                    .Format(format)
-                    .Save(System.IO.Path.Combine(outPath));
-                }
-            }
+            Console.WriteLine("END");
+            
+            #region linq join
+            //List<Student> student = new List<Student>() { 
+            //    new Student(){ID=1,Name="张6", Age=20, Gender=1, GradeID=1},
+            //    new Student(){ID=2,Name="张5", Age=16, Gender=0, GradeID=5},
+            //    new Student(){ID=3,Name="张6", Age=12, Gender=0, GradeID=2},
+            //    new Student(){ID=4,Name="张8", Age=18, Gender=0, GradeID=4},
+            //    new Student(){ID=5,Name="张4", Age=21, Gender=1, GradeID=2},
+            //    new Student(){ID=6,Name="张2", Age=10, Gender=0, GradeID=3},
+            //    new Student(){ID=7,Name="张1", Age=13, Gender=1, GradeID=2},
+            //    new Student(){ID=8,Name="张11", Age=15, Gender=1, GradeID=2},
+            //    new Student(){ID=9,Name="张12", Age=11, Gender=1, GradeID=2},
+            //    new Student(){ID=10,Name="张13", Age=17, Gender=1, GradeID=2},
+            //    new Student(){ID=11,Name="张21", Age=13, Gender=1, GradeID=2},
+            //    new Student(){ID=12,Name="张9", Age=16, Gender=1, GradeID=6},
+                
+            //    new Student(){ID=11,Name="张21", Age=13, Gender=1, GradeID=7},
+            //    new Student(){ID=12,Name="张9", Age=16, Gender=1, GradeID=8},
+            //};
+            //List<Grade> grade = new List<Grade>() { 
+            //    new Grade(){ID=1, Name="1",  Floor=1},
+            //    new Grade(){ID=2, Name="2",  Floor=2},
+            //    new Grade(){ID=3, Name="3",  Floor=3},
+            //    new Grade(){ID=4, Name="4",  Floor=4},
+            //    new Grade(){ID=5, Name="5",  Floor=5},
+            //    new Grade(){ID=6, Name="6",  Floor=6},
+            //    new Grade(){ID=10, Name="10",  Floor=10},
+            //};
+            //var result = (from s in student
+            //              join g in grade on s.GradeID equals g.ID
+            //              where s.GradeID == 2 && s.Age > 10 && s.Age < 18
+            //              orderby s.ID ascending
+            //              //group s by new { s.Gender} into g
+            //              select new
+            //              {
+            //                  SID = s.ID,
+            //                  s.Name,
+            //                  s.Age,
+            //                  s.Gender,
+            //                  GID = g.ID,
+            //                  GradeName = g.Name,
+            //                  g.Floor
+            //              });
+            //var left = from s in student
+            //           join g in grade on s.GradeID equals g.ID into t
+            //           from g in t.DefaultIfEmpty()
+            //           select new
+            //           {
+            //               SID = s.ID,
+            //               s.Name,
+            //               s.Age,
+            //               s.Gender,
+            //               GID = g!=null? g.ID:0,
+            //               GradeName =g!=null?g.Name:string.Empty,
+            //               Floor = g!=null? g.Floor:0
+            //           };
+            //foreach (var item in left)
+            //{
+            //    Console.WriteLine(string.Format("ID:{0} - Name:{1} - Age:{2} - Gender:{3} - GradeName:{4} - Floor:{5} - GID:{6}", item.SID, item.Name, item.Age, item.Gender, item.GradeName, item.Floor,item.GID));
+            //}
+
+            //var right = from g in grade
+            //            join s in student on g.ID equals s.GradeID into t
+            //           from s in t.DefaultIfEmpty()
+            //           select new
+            //           {
+            //               ID = s != null ? s.ID : 0,
+            //               Name = s!=null?s.Name:string.Empty,
+            //               GID = g != null ? g.ID : 0,
+            //               GradeName = g != null ? g.Name : string.Empty,
+            //               Floor = g != null ? g.Floor : 0
+            //           };
+            //foreach (var item in right)
+            //{
+            //    Console.WriteLine(string.Format("ID:{0} - Name:{1} - GradeName:{2} - Floor:{3} - GID:{4}", item.ID, item.Name, item.GradeName, item.Floor, item.GID));
+            //}
+
+            //int pageSize = 3, pageIndex = 1;
+            //var result1 = result.Skip((pageIndex-1)*pageSize).Take(pageSize);
+            //pageIndex = 2;
+            //var result2 = result.Skip((pageIndex-1)*pageSize).Take(pageSize);
+
+            //foreach (var item in result)
+            //{
+            //    Console.WriteLine(string.Format("ID:{0} - Name:{1} - Age:{2} - Gender:{3} - GradeName:{4} - Floor:{5}",item.SID, item.Name, item.Age, item.Gender, item.GradeName, item.Floor));
+            //}
+            //Console.WriteLine("result1--");
+            //foreach (var item in result1)
+            //{
+            //    Console.WriteLine(string.Format("ID:{0} - Name:{1} - Age:{2} - Gender:{3} - GradeName:{4} - Floor:{5}", item.SID, item.Name, item.Age, item.Gender, item.GradeName, item.Floor));
+            //}
+            //Console.WriteLine("result2--");
+            //foreach (var item in result2)
+            //{
+            //    Console.WriteLine(string.Format("ID:{0} - Name:{1} - Age:{2} - Gender:{3} - GradeName:{4} - Floor:{5}", item.SID, item.Name, item.Age, item.Gender, item.GradeName, item.Floor));
+            //}
+            #endregion
+
+            #region Qiniu
+            //Qiniu.Conf.Config.ACCESS_KEY = "2U2RcNJt3BfD7HDGfFGLoRY4s3UdF8xuE9K_Ysow";
+            //Qiniu.Conf.Config.SECRET_KEY = "Z1_jfUyy3ema1Qvu5ihjjTanASGEMXDLvjVuu307";
+
+            //string inputPath = @"F:\movie-image\process\",
+            //    baseLog = System.AppDomain.CurrentDomain.BaseDirectory + "log_qiniu.txt";
+
+            //var files = System.IO.Directory.GetFiles(inputPath);
+
+            //foreach (var item in files)
+            //{
+            //    //string fileName = item.Substring(item.LastIndexOf("\\") + 1);             
+            //    Action<string> putFile = (url) =>
+            //    {
+            //        var fileName = url.Substring(url.LastIndexOf("\\") + 1);
+            //        if (!fileName.Contains("-")) return;
+            //        var saveKey = "image/movie/" + fileName;
+            //        var policy = new PutPolicy("myweb0802", 10);
+            //        string upToken = policy.Token();
+            //        PutExtra extra = new PutExtra();
+            //        var result = new IOClient().PutFile(upToken, saveKey, url, extra);
+            //        Console.WriteLine(result.OK);
+            //        if (!result.OK)
+            //        {
+            //            Console.WriteLine(result.Exception.Message);
+            //        }
+            //        else
+            //        {
+            //            var temp = fileName.Split('-');
+            //            var sql = string.Format("INSERT INTO `movie_db`.`movie_images` (`name`,`createdAt`,`old_id`,`domain`)VALUES('{0}','{1}','{2}','{3}') ;", saveKey, DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), temp[1], temp[0]);
+            //            var data_result = new DBClient().Execute(sql, "movie_db");
+            //        }
+            //    };
+            //    putFile.BeginInvoke(item, null, null);
+            //    Thread.Sleep(300);
+            //}
+            #endregion
+            Console.ReadKey();
+
+            #region Regex AESEncrypt userAgent
+            //var id = "eee123456789";
+            //Regex reg = new Regex(@"^\d+$");
+            //if (reg.Match(id).Success)
+            //{
+            //    Console.WriteLine("ok");
+            //}
+            //id = "gdgd123456789DDD";
+            //if (reg.Match(id).Success)
+            //{
+            //    Console.WriteLine("ok");
+            //}
+            //id = "10056";
+            //if (reg.Match(id).Success)
+            //{
+            //    Console.WriteLine("ok");
+            //}
 
 
-            Console.WriteLine();
+            //var temp = Test.AESHelper.AESEncrypt("13800138000", "auto@life");
+            //var temp2 = Test.AESHelper.AESDecrypt(temp, "auto@life");
+
+            //Console.WriteLine(temp + "--" + temp2);
+
+           
+
+            //var userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+            ////"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1";
+            //Regex regex = new Regex("Android|iPhone|iPod|mobile|ucweb|Windows Phone|SymbianOS", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            //if (regex.IsMatch(userAgent))
+            //{
+            //    Console.WriteLine("/");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("http:/www.auto.life/");
+            //}
+            #endregion
+
+            #region redis action
+            //var redis = new Radis(1);
+            //redis.Set<string>("redis", "this is string");
+            //var value = redis.Get<string>("redis");
+            //Console.WriteLine(value);
+            #endregion
+
             #region mysql movie 图片下载
             //DataAccess.MySql.DBClient dbclient = new DBClient();
             //var data = dbclient.GetData("SELECT mt.Id,mt.Gid,mt.Title FROM movie_2tu mt", "mysql");
@@ -76,7 +269,7 @@ namespace Test
             //    var id = item["id"].ToString();
             //    var title = item["title"].ToString();
             //    var oldid = item["gid"].ToString();
-                
+
             //    string titles = string.Empty;
             //    if (title.Contains("/"))
             //    {
@@ -424,7 +617,7 @@ namespace Test
             //var alltask = Task.WhenAll(tasks);
             //alltask.Wait();
 
-            
+
             //string[] filenames = { "chapter1.txt", "chapter2.txt", "chapter3.txt", "chapter4.txt", "chapter5.txt" };
             //string pattern = @"\b\w+\b";
             //var tasks = new List<Task>();
@@ -602,24 +795,73 @@ namespace Test
 
             #region  pdf 读取
             //System.Text.StringBuilder text = new StringBuilder();
-            //using (PdfReader pdf = new PdfReader(@"E:\D\BlueFocus_April2016 (1).pdf"))
+            //using (PdfReader pdf = new PdfReader(@"E:\17.pdf"))
             //{
             //    for (int i = 1; i <= pdf.NumberOfPages; i++)
             //    {
             //        var txt = PdfTextExtractor.GetTextFromPage(pdf, i);
-            //        var id = SloveString.CutString(txt, "Account Id / Group: ([\\S\\s]*?)\n");
-            //        var price = SloveString.CutString(txt, "Invoice Total:([\\S\\s]*?)\n");
+            //        var id = SloveString.CutString(txt, "Online Account Id #:([\\S\\s]*?)\n");
+            //        var price = SloveString.CutString(txt, "Total Credit :([\\S\\s]*?)\n");
             //        if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(price))
             //        {
             //            Console.WriteLine("");
             //        }
-            //        text.AppendLine(id + ":" + price);
+            //        text.AppendLine(i+":"+id + ":" + price);
             //        Console.WriteLine("page:" + i + " -- " + id + ":" + price);
-
             //    }
             //}
-            //System.IO.File.AppendAllText(@"E:\1.txt", text.ToString());
+            //System.IO.File.AppendAllText(@"E:\2.txt", text.ToString());
             //int i = 0;
+            #endregion
+
+            #region 合并多个pdf
+            //var files = System.IO.Directory.GetFiles(@"E:\test\0410");
+            //var outMergeFile = @"E:\test\0410\merge.pdf";
+
+            //Document document = new Document();
+            //PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(outMergeFile, FileMode.Create));
+            //document.Open();
+            //PdfContentByte cb = writer.DirectContent;
+            //PdfImportedPage newPage;
+            //foreach (var item in files)
+            //{
+            //    PdfReader reader = new PdfReader(item);
+            //    int iPageNum = reader.NumberOfPages;
+            //    for (int j = 1; j <= iPageNum; j++)
+            //    {
+            //        document.NewPage();
+            //        newPage = writer.GetImportedPage(reader, j);
+            //        cb.AddTemplate(newPage, 0, 0);
+            //    }
+            //}
+            //document.Close();
+
+
+
+            //var _files = new RecursionFile(@"E:\test\0410\Invocie");
+            //var files = _files.Files_Array;
+            //string outMergeFile = @"E:\test\0410\newpdf.pdf";
+            //using (Document document = new Document())
+            //{
+            //    PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(outMergeFile, FileMode.Create));
+
+            //    document.Open();
+
+            //    PdfContentByte cb = writer.DirectContent;
+            //    PdfImportedPage newPage;
+            //    foreach (var item in files)
+            //    {
+            //        PdfReader reader = new PdfReader(item);
+            //        int iPageNum = reader.NumberOfPages;
+            //        for (int j = 1; j <= iPageNum; j++)
+            //        {
+            //            document.NewPage();
+            //            newPage = writer.GetImportedPage(reader, j);
+            //            cb.AddTemplate(newPage, 0, 0);
+            //        }
+            //    }
+            //}
+            //Console.Read();
             #endregion
 
             #region dictonary 序列化
@@ -701,6 +943,24 @@ namespace Test
             #endregion
 
             #region 图片切割压缩
+            //var outPath = @"E:\images-test\1\1.jpg";
+            //Size size = new Size(640, 0);
+            //ISupportedImageFormat format = new JpegFormat { Quality = 85 };
+            //ImageProcessor.Imaging.ResizeLayer resize = new ImageProcessor.Imaging.ResizeLayer(size, ImageProcessor.Imaging.ResizeMode.Max);
+
+            //var fileName = @"E:\images-test\57906074N8c9c510f.jpg";
+            //Console.WriteLine(fileName);
+            //using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            //{
+            //    using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
+            //    {
+            //        imageFactory.Load(fs)
+            //        .Resize(resize)
+            //        .Format(format)
+            //        .Save(System.IO.Path.Combine(outPath));
+            //    }
+            //}
+
             //ThumbsImage thumbs = new ThumbsImage() { Quality = 100 };
             //thumbs.CutForCustom(@"D:\3.jpg", @"D:\360Downloads\3_Cut.jpg", 1280, 600);
             //thumbs.GetPicThumbnail(@"D:\3.jpg", @"D:\360Downloads\2_Crop.jpg", 100);
@@ -787,7 +1047,7 @@ namespace Test
 
             //Console.WriteLine("ok");
             //Thread.Sleep(1000 * 60);
-            
+
             //var policy = new PutPolicy("xmall", 3600);
             //System.Console.WriteLine(policy);
             //string upToken = policy.Token();
@@ -800,6 +1060,50 @@ namespace Test
             //string viewUrl = imageView.MakeRequest("http://lmall.qiniudn.com/FjBCDRqa-yvLYDNYElaa9ENaWc4X");
             //viewUrl = GetPolicy.MakeRequest(viewUrl);
             //Console.WriteLine("ImageViewURL:" + viewUrl);
+
+            
+            #endregion
+
+            #region 压缩图片ImageProcessor
+            //string inputPath = @"F:\movie-image\original\",
+            //    outPath = @"F:\movie-image\process\",
+            //    baseLog = System.AppDomain.CurrentDomain.BaseDirectory + "log.txt";
+
+            //var files = System.IO.Directory.GetFiles(inputPath);
+
+            //string file = @"E:\bak\1920x1080a.jpg";
+            //byte[] photoBytes = File.ReadAllBytes(file);
+
+            //foreach (var item in files)
+            //{
+            //    string fileName = item.Substring(item.LastIndexOf("\\") + 1),
+            //        newFileName = System.IO.Path.Combine(outPath, fileName);
+            //    try
+            //    {
+            //        using (FileStream inStream = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read))
+            //        {
+            //            using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
+            //            {
+            //                imageFactory.Load(inStream).
+            //                    Resize(new ImageProcessor.Imaging.ResizeLayer(new Size(300, 420), ImageProcessor.Imaging.ResizeMode.Max))
+            //                    .Format(new JpegFormat { Quality = 85 })
+            //                    .Save(newFileName);
+            //                Console.WriteLine("OK：" + fileName);
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //        using (FileStream fs = new FileStream(baseLog, FileMode.Append, FileAccess.Write, FileShare.Write))
+            //        {
+            //            using (StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8))
+            //            {
+            //                sw.WriteLine(item);
+            //            }
+            //        }
+            //    }
+            //}
             #endregion
 
             #region Test DB Connection
@@ -889,6 +1193,135 @@ namespace Test
             //System.Threading.Thread.Sleep(1000 * 120);
             Console.ReadKey();
         }
+
+        static List<int> QuickSort(List<int> arr)
+        {
+            if (arr.Count() <= 1) return arr;
+
+            var mid = Math.Floor((double)(arr.Count() / 2));
+            int val = arr[Math.Sign(mid)];
+            arr.RemoveAt(Math.Sign(mid));
+
+            var left = new List<int>();
+            var right = new List<int>();
+
+            for (int i = 0; i < arr.Count(); i++)
+            {
+                if (arr[i] < val)
+                {
+                    left.Add(arr[i]);
+                }
+                else
+                {
+                    right.Add(arr[i]);
+                }
+            }
+            return QuickSort(left).Concat(new List<int>() { val }).ToList<int>().Concat(QuickSort(right)).ToList<int>();
+            //var _arr = new List<int>();
+            //_arr.AddRange(QuickSort(left));
+            //_arr.AddRange(new List<int>() { val });
+            //_arr.AddRange(QuickSort(right));
+            //return _arr;
+        }
+
+        //public void test(int i)
+        //{
+        //    Lock(this)
+        //    {
+        //      if(i>0)
+        //        {
+        //        i--;
+        //        }
+        //        test(i);
+        //    }
+        //}
+        static string GetFileMd5(string path)
+        {
+            try
+            {
+                FileStream file = new FileStream(path, FileMode.Open);
+                System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+                byte[] retVal = md5.ComputeHash(file);
+                file.Close();
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    sb.Append(retVal[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+                //throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
+            }
+        }
+
+        private static void DownDomain(string basePath, ArrayList link)
+        {
+            Console.WriteLine(basePath);
+            foreach (var item in link)
+            {
+                var it = item.ToString().ToLower();
+                var _uri = it.IndexOf("http://") == -1 ? "http://m.auto.life" + item : it;
+                if (it.Contains(".ico") || it.Contains(".png") || it.Contains("javascript:") || it.Contains("tel:")) continue;
+                var paths = it.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (paths.Count() == 0) continue;
+                var _html = SloveString.GetHttpData(_uri);
+                if (paths.Count() == 1)
+                {
+                   
+                    if (_uri.Contains(".html"))
+                    {
+                        if (!System.IO.File.Exists(basePath))
+                        {
+                            var fileName = _uri.Substring(_uri.Trim('/').LastIndexOf("/")).Trim('/');
+                            System.IO.File.WriteAllText(System.IO.Path.Combine(basePath, fileName), _html);
+                        }
+                    }
+                    else
+                    {
+                        
+                        var fileName = _uri.Substring(_uri.Trim('/').LastIndexOf("/")).Trim('/');
+                        System.IO.File.WriteAllText(System.IO.Path.Combine(basePath,fileName), _html);
+                    }
+                    
+                }
+                else
+                {
+                    var file = paths[paths.Count() - 1];
+                    paths.RemoveAt(paths.Count() - 1);
+                    var p = string.Join(@"\", paths.ToArray()).Replace("http:\\", "");
+                    var _path = System.IO.Path.Combine(basePath, p);
+
+                    if (!System.IO.Directory.Exists(_path))
+                    {
+                        System.IO.Directory.CreateDirectory(_path);
+                    }
+                    var filePath = System.IO.Path.Combine(_path, file);
+                    if (filePath.Contains("?"))
+                    {
+                        filePath = filePath.Substring(0, filePath.IndexOf("?"));
+                    }
+                    if (!System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.WriteAllText(filePath, _html);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (!it.Contains(".css") && !it.Contains(".js"))
+                    {
+                        var _link = SloveString.CutStr(_html, "href=\"([\\S\\s][^<>]*?)\"");
+                        DownDomain(basePath, _link);
+                    }
+                }
+            }
+        }
+
         static string rec(string v)
         {
             var k = new string[] { "1024高清", "迅雷下载", "悬疑", "惊悚", "恐怖", "剧情", "喜剧", "爱情", "家庭", "奇幻", "犯罪", "科幻", "动作", "纪录", "古装", "历史", "传记", "同性", "冒险", "战争", "儿童", "灾难", "动画", "音乐", "青春", "魔幻", "运动", "情色", "丧尸", "励志", "武侠", "传纪", "歌舞", "穿越", "西部", "短片", "贺岁", "军事", "伦理", "文艺", "微电影", "罪案", "现实", "电影" };
@@ -957,7 +1390,7 @@ namespace Test
             try
             {
                 //连接到Excel； 
-                string connExecel = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + FileName + ";Extended Properties='Excel 8.0;HDR=NO;IMEX=1';";
+                string connExecel = "Provider=Microsoft.ACE.OLEDB.12 .0;Data Source=" + FileName + ";Extended Properties='Excel 8.0;HDR=NO;IMEX=1';";
                 //string connExecel = Provider=Microsoft.JET.OLEDB.4.0;Data Source=" + path + ";Extended Properties='Excel 8.0;HDR=NO;IMEX=1';";  //Office 07以下版本
                 OleDbConnection Conn = new OleDbConnection(connExecel);
                 Conn.Open();
@@ -974,15 +1407,68 @@ namespace Test
             {
             }
             return datatable;
+        }    
+
+        /**
+        * 生成时间戳，标准北京时间，时区为东八区，自1970年1月1日 0点0分0秒以来的秒数
+         * @return 时间戳
+        */
+        public static string GenerateTimeStamp()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
 
+        public Task<string> GetHtmlAsync()
+        {
+            var client = new HttpClient();
+            return client.GetStringAsync("http://www.dotnetfoundation.org");
+        }
+
+        public async Task<string> GetFirstCharactersCountAsync()
+        {
+            // Execution is synchronous here
+            var client = new HttpClient();
+
+            // Execution of GetFirstCharactersCountAsync() is yielded to the caller here
+            // GetStringAsync returns a Task<string>, which is *awaited*
+            var page = await client.GetStringAsync("http://www.dotnetfoundation.org");
+
+            // Execution resumes when the client.GetStringAsync task completes,
+            // becoming synchronous again.
+
+            return page;
+        }
+
+        public static int GetRecursive(int Num)
+        {
+            if (Num <= 1) return Num;
+            int result = GetRecursive(Num - 1) + GetRecursive(Num - 2);
+            return result;
+        }
 
     }
+
+    public class Student {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public int Gender { get; set; }
+        public int GradeID { get; set; }
+    }
+    public class Grade {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Floor { get; set; }
+    }
+
+
     public class StreamWriterWithTimestamp : StreamWriter
     {
         public StreamWriterWithTimestamp(Stream stream)
             : base(stream)
         {
+
         }
 
         private string GetTimestamp()
@@ -1004,4 +1490,37 @@ namespace Test
     }
 
 
+    //递归取路径
+    /// <summary>
+    /// 递归取路径
+    /// </summary>
+    public class RecursionFile
+    {
+        public RecursionFile(string strBaseDir)
+        {
+            this.StrBaseDir = strBaseDir;
+            this.Files_Array = new List<string>();
+            this.GetAllDir(strBaseDir);
+        }
+
+        public List<string> Files_Array { get; set; }
+        public string StrBaseDir { get; set; }
+        //循环目录递归上传
+        private void GetAllDir(string strBaseDir)
+        {
+            DirectoryInfo[] array = new DirectoryInfo(strBaseDir).GetDirectories();
+            foreach (var item in array)
+            {
+                var files = Directory.GetFiles(item.FullName);
+                if (files.Length > 0)
+                {
+                    this.Files_Array.AddRange(files);
+                }
+                this.GetAllDir(item.FullName);
+            }
+        }
+    }
+
 }
+
+    

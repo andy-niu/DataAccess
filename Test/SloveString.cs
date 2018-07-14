@@ -510,7 +510,7 @@ namespace Test
             temp = Regex.Replace(temp, "<form.*?>", "");
             temp = Regex.Replace(temp, "</form>", "");
             temp = Regex.Replace(temp, "<tbody>", "");
-            //temp = Regex.Replace(temp, "</tbody>", "");
+            temp = Regex.Replace(temp, "</tbody>", "");
             temp = Regex.Replace(temp, "<col.*?>", "");
             try
             {

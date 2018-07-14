@@ -14,6 +14,7 @@ namespace Cache.RadisCache
         public Radis(long DefaultDb)
         {
             RadisManager.DefaultDb = DefaultDb;
+            RadisManager.ReInitializeRedisPool();
         }
         //默认构造
         public Radis()
