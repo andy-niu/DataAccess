@@ -175,8 +175,8 @@ namespace Test
             #endregion
 
             #region Qiniu
-            //Qiniu.Conf.Config.ACCESS_KEY = "2U2RcNJt3BfD7HDGfFGLoRY4s3UdF8xuE9K_Ysow";
-            //Qiniu.Conf.Config.SECRET_KEY = "Z1_jfUyy3ema1Qvu5ihjjTanASGEMXDLvjVuu307";
+            //Qiniu.Conf.Config.ACCESS_KEY = "2U2RcNJt3BfD7HDGfFGLoRY4s3UdF8x******";
+            //Qiniu.Conf.Config.SECRET_KEY = "Z1_jfUyy3ema1Qvu5ihjjTanASGEMX********";
 
             //string inputPath = @"F:\movie-image\process\",
             //    baseLog = System.AppDomain.CurrentDomain.BaseDirectory + "log_qiniu.txt";
@@ -988,8 +988,8 @@ namespace Test
             #endregion
 
             #region Qiniu
-            //Qiniu.Conf.Config.ACCESS_KEY = "2U2RcNJt3BfD7HDGfFGLoRY4s3UdF8xuE9K_Ysow";
-            //Qiniu.Conf.Config.SECRET_KEY = "Z1_jfUyy3ema1Qvu5ihjjTanASGEMXDLvjVuu307";
+            //Qiniu.Conf.Config.ACCESS_KEY = "2U2RcNJt3BfD7HDGfFGLoRY4s3UdF8x******";
+            //Qiniu.Conf.Config.SECRET_KEY = "Z1_jfUyy3ema1Qvu5ihjjTanASGEMX********";
 
 
             //var array = Directory.GetFiles(@"E:\movie-image\ygdy8-new");
